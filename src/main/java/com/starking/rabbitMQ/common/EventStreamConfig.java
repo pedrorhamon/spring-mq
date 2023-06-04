@@ -2,8 +2,12 @@ package com.starking.rabbitMQ.common;
 
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
@@ -17,6 +21,7 @@ import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 import org.springframework.rabbit.stream.retry.StreamRetryOperationsInterceptorFactoryBean;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.util.unit.DataSize;
 
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
@@ -87,27 +92,29 @@ public class EventStreamConfig {
 
 	@Bean
 	Exchange superStream() {
-		return ExchangeBuilder.directExchange(applicationName).build();
+		return ExchangeBuilder
+				.directExchange(applicationName)
+				.build();
 	}
-//
-//	    @Bean
-//	    Queue streamPartition() {
-//	        return QueueBuilder
-//	                .durable("partition-1")
-//	                .stream()
-//	                .withArgument("x-max-age", "7D")
-//	                .withArgument("x-max-length-bytes", DataSize
-//	                        .ofGigabytes(10).toBytes())
-//	                .build();
-//	    }
-//
-//	    @Bean
-//	    Binding streamPartitionBind(Exchange superStream, Queue streamPartition) {
-//	        return BindingBuilder
-//	                .bind(streamPartition)
-//	                .to(superStream)
-//	                .with("")
-//	                .noargs();
-//	    }
+
+	@Bean
+	Queue streamPartition() {
+		return QueueBuilder
+				.durable("partition-1")
+				.stream()
+				.withArgument("x-max-age", "7D")
+				.withArgument("x-max-length-bytes", 
+						DataSize.ofGigabytes(10).toBytes())
+				.build();
+	}
+
+	@Bean
+	Binding streamPartitionBind(Exchange superStream, Queue streamPartition) {
+		return BindingBuilder
+				.bind(streamPartition)
+				.to(superStream)
+				.with("")
+				.noargs();
+	}
 
 }
