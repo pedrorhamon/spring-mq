@@ -1,5 +1,7 @@
 package com.starking.rabbitMQ.common;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -12,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
 import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
+import org.springframework.retry.support.RetryTemplate;
 
 import com.rabbitmq.stream.Environment;
 import com.rabbitmq.stream.OffsetSpecification;
@@ -63,17 +66,14 @@ public class EventStreamConfig {
 				.manualTrackingStrategy());
 		return factory;
 	}
-//
-//	    @Bean
-//	    RetryTemplate basicStreamRetryTemplate() {
-//	        return RetryTemplate.builder()
-//	                .infiniteRetry()
-//	                .exponentialBackoff(
-//	                        TimeUnit.SECONDS.toMillis(10),
-//	                        1.5,
-//	                        TimeUnit.MINUTES.toMillis(5)
-//	                ).build();
-//	    }
+
+	@Bean
+	RetryTemplate basicStreamRetryTemplate() {
+		return RetryTemplate.builder().infiniteRetry()
+				.exponentialBackoff(TimeUnit.SECONDS.toMillis(10), 1.5, 
+						TimeUnit.MINUTES.toMillis(5))
+				.build();
+	}
 //
 //	    @Bean
 //	    StreamRetryOperationsInterceptorFactoryBean streamRetryOperationsInterceptorFactoryBean(RetryTemplate basicStreamRetryTemplate) {
