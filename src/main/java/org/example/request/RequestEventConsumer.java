@@ -1,21 +1,18 @@
-package com.starking.rabbitMQ.request;
+package org.example.request;
 
-import java.io.IOException;
-
-import javax.annotation.PostConstruct;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.stream.Message;
+import com.rabbitmq.stream.MessageHandler;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.stream.Message;
-import com.rabbitmq.stream.MessageHandler;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 
 /**
  * @author pedroRhamon

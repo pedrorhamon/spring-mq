@@ -1,4 +1,4 @@
-package com.starking.rabbitMQ;
+package org.example;
 
 import java.util.TimeZone;
 
