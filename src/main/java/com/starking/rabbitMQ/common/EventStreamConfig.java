@@ -3,14 +3,18 @@ package com.starking.rabbitMQ.common;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.rabbit.stream.config.StreamRabbitListenerContainerFactory;
+import org.springframework.rabbit.stream.listener.StreamListenerContainer;
 import org.springframework.rabbit.stream.producer.RabbitStreamTemplate;
 
 import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
 import com.rabbitmq.stream.impl.StreamEnvironmentBuilder;
 
 import lombok.RequiredArgsConstructor;
@@ -51,18 +55,14 @@ public class EventStreamConfig {
 		return template;
 	}
 
-//	    @Bean
-//	    RabbitListenerContainerFactory<StreamListenerContainer> streamContainerFactory(Environment env) {
-//	        var factory = new StreamRabbitListenerContainerFactory(env);
-//	        factory.setNativeListener(true);
-//	        factory.setConsumerCustomizer(
-//	                (id, builder) ->
-//	                        builder.name(applicationName)
-//	                                .offset(OffsetSpecification.first())
-//	                                .manualTrackingStrategy()
-//	        );
-//	        return factory;
-//	    }
+	@Bean
+	RabbitListenerContainerFactory<StreamListenerContainer> streamContainerFactory(Environment env) {
+		var factory = new StreamRabbitListenerContainerFactory(env);
+		factory.setNativeListener(true);
+		factory.setConsumerCustomizer((id, builder) -> builder.name(applicationName).offset(OffsetSpecification.first())
+				.manualTrackingStrategy());
+		return factory;
+	}
 //
 //	    @Bean
 //	    RetryTemplate basicStreamRetryTemplate() {
