@@ -16,9 +16,9 @@ public class RabbitMqApplication {
 		SpringApplication.run(RabbitMqApplication.class, args);
 	}
 	
-	@PostConstruct
-	void init() {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-	}
+//	@PostConstruct
+//	void init() {
+//		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+//	}
 
 }

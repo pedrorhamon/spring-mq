@@ -37,6 +37,9 @@ class RequestEventConsumer {
     )
     void onConsumer(Message in, MessageHandler.Context context) throws IOException {
         log.info("Stream partition message offset: {}", context.offset());
+        if(context.offset() == 100) {
+        	context.storeOffset();
+        }
         var request = objectMapper.readValue(in.getBodyAsBinary(), Request.class);
         log.info("Consumer message: {}", request);
     }

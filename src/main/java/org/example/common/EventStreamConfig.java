@@ -1,10 +1,13 @@
 package org.example.common;
 
-import com.rabbitmq.stream.Environment;
-import com.rabbitmq.stream.OffsetSpecification;
-import com.rabbitmq.stream.impl.StreamEnvironmentBuilder;
-import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.*;
+import java.util.concurrent.TimeUnit;
+
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.RabbitListenerContainerFactory;
@@ -20,16 +23,11 @@ import org.springframework.rabbit.stream.retry.StreamRetryOperationsInterceptorF
 import org.springframework.retry.support.RetryTemplate;
 import org.springframework.util.unit.DataSize;
 
-import java.util.concurrent.TimeUnit;
-import org.springframework.context.annotation.PropertySource;
-
-/**
- * @author pedroRhamon
- */
+import com.rabbitmq.stream.Environment;
+import com.rabbitmq.stream.OffsetSpecification;
+import com.rabbitmq.stream.impl.StreamEnvironmentBuilder;
 
 @Configuration
-@RequiredArgsConstructor
-//@PropertySource(ignoreResourceNotFound = true, value = "classpath:some_file_name.properties")
 class EventStreamConfig {
     @Value("${spring.application.name}")
     private String applicationName;
