@@ -80,8 +80,8 @@ class EventStreamConfig {
         return RetryTemplate.builder()
                 .infiniteRetry()
                 .exponentialBackoff(
-                        TimeUnit.SECONDS.toMillis(10),
-                        1.5,
+                        TimeUnit.SECONDS.toMillis(15),
+                        2.0,
                         TimeUnit.MINUTES.toMillis(5)
                 ).build();
     }
@@ -107,7 +107,7 @@ class EventStreamConfig {
                 .stream()
                 .withArgument("x-max-age", "7D")
                 .withArgument("x-max-length-bytes", DataSize
-                        .ofGigabytes(10).toBytes())
+                        .ofGigabytes(20).toBytes())
                 .build();
     }
 
